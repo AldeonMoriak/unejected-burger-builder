@@ -1,0 +1,12 @@
+.Menu {
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  padding: 3px;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.Menu img {
+  height: 100%;
+}
