@@ -25,7 +25,7 @@ class BurgerBuilder extends Component {
     error: false
   };
 
-  componentDidMount() {
+  componentWillMount() {
     axios
       .get("https://aldeon-react-burger.firebaseio.com/ingredients.json")
       .then(response => {
@@ -85,28 +85,20 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    // alert("You continue!");
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      // not something you would do on a real app, the total price should be calculated on the server, to avoid using manipulated data by user
-      price: this.state.totalPrice,
-      customer: {
-        name: "Aldeon Moriak",
-        address: {
-          street: "Teststreet 1",
-          zipCode: "41345",
-          country: "Iran"
-        },
-        email: "test@test.com"
-      },
-      deliveryMethod: "fastest"
-    };
-
-    axios
-      .post("/orders.json", order)
-      .then(response => this.setState({ loading: false, purchasing: false }))
-      .catch(error => this.setState({ loading: false, purchasing: false }));
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    queryParams.push("price=" + this.state.totalPrice);
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString
+    });
   };
 
   render() {
